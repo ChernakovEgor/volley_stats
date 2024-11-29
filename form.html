@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </head>
 <body>
 
 <h1>Volleyball Form</h1>
 
-<form action="http://localhost:2345/move" method="POST">
+<form id="myForm" action="http://localhost:2345/move" method="POST">
   <label for="fname">First name:</label><br>
   <input type="text" id="fname" name="fname" value="John"><br>
   <label for="lname">Last name:</label><br>
@@ -12,6 +15,31 @@
   <input type="submit" value="Submit">
 </form> 
 
+  <script>
+    // Prevent redirection on form submission
 
+    var form = document.getElementById('myForm');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const data = new FormData(event.target);
+      const value = Object.fromEntries(data.entries());
+      const jsonData = JSON.stringify(value)
+
+      console.log("Sending data:");
+      console.log(jsonData);
+      // $.post("http://localhost:2345/move", value, function(data, status) {
+      //   console.log("Data: " + data + "\nStatus: " + status);
+      // })
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:2345/move",
+        data: jsonData,
+        success: function(){console.log("data was sent");},
+        dataType: "json",
+        contentType : "application/json"
+      });
+    });
+  </script>
 </body>
 </html>
